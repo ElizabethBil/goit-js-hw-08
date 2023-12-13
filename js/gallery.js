@@ -71,10 +71,22 @@ images.map(({ preview, original, description }) => {
   const link = document.createElement("a");
   const img = document.createElement("img");
   const gallery = document.querySelector(".gallery");
+  const modal = basicLightbox.create(`
+    <img src="${original}">
+`);
+  
   items.addEventListener("click", e => {
     e.preventDefault()
-  
+
     console.log(original);
+
+    modal.show()
+  })
+
+  items.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      modal.close()
+    }
   })
 
   items.className = "gallery-image";
@@ -93,3 +105,4 @@ images.map(({ preview, original, description }) => {
 })
 
 
+  
