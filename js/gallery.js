@@ -147,3 +147,36 @@ gallery.innerHTML = images.reduce((html, { preview, original, description }) => 
   
 
   
+//// 3 ////
+
+
+const gallery = document.querySelector(".gallery");
+
+gallery.innerHTML = images.map(({ preview, original, description }) =>
+`<li class="gallery-item">
+  <a class="gallery-link" href="${original}">
+    <img
+      class="gallery-image"
+      src="${preview}"
+      data-source="${original}"
+      alt="${description}"
+    />
+  </a>
+</li>`).join("")
+
+
+gallery.addEventListener("click", e => {
+  e.preventDefault();
+
+  const clicked = e.target.dataset.source;
+  if (clicked) {
+    console.log(clicked);
+  };
+
+  const modal = basicLightbox.create(`<img
+      width="1200"
+      height="1200"
+src="${clicked}"
+    />`).show()
+
+})
