@@ -66,6 +66,9 @@ const images = [
 
 
 
+//// 1 ////
+
+
 images.map(({ preview, original, description }) => {
   const items = document.createElement("li");
   const link = document.createElement("a");
@@ -104,5 +107,43 @@ images.map(({ preview, original, description }) => {
   return gallery
 })
 
+
+
+
+
+//// 2 ////
+
+
+const gallery = document.querySelector(".gallery");
+
+const modal = basicLightbox.create('', {
+  onShow: document.addEventListener("keydown", (e) => {
+    e.preventDefault()
+    if (e.target.nodeName !== "IMG") {
+    modal.content(`<img src="${images.original}">`);
+    modal.show();
+  }
+  }),
+  onClose: document.removeEventListener("keydown", (e) => {
+  e.preventDefault()
+  if (e.key === "Escape") {
+    modal.close();
+  }
+}),
+});
+
+gallery.innerHTML = images.reduce((html, { preview, original, description }) => html + 
+`<li class="gallery-item">
+  <a class="gallery-link" href="${original}">
+    <img
+      class="gallery-image"
+      src="${preview}"
+      data-source="${original}"
+      alt="${description}"
+    />
+  </a>
+</li>`, "")
+
+  
 
   
