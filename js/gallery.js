@@ -66,71 +66,7 @@ const images = [
 
 
 
-//// 1 ////
-
-
-images.map(({ preview, original, description }) => {
-  const items = document.createElement("li");
-  const link = document.createElement("a");
-  const img = document.createElement("img");
-  const gallery = document.querySelector(".gallery");
-  const modal = basicLightbox.create(`
-    <img src="${original}">
-`);
-  
-  items.addEventListener("click", e => {
-    e.preventDefault()
-
-    console.log(original);
-
-    modal.show()
-  })
-
-  items.addEventListener("keydown", e => {
-    if (e.key === "Escape") {
-      modal.close()
-    }
-  })
-
-  items.className = "gallery-image";
-  link.className = "gallery-link";
-  link.href = original;
-  img.className = "gallery-image";
-  img.src = preview;
-  img.dataset.source = original;
-  img.alt = description;
-
-  link.append(img);
-  items.append(link);
-  gallery.append(items);
-
-  return gallery
-})
-
-
-
-
-
-//// 2 ////
-
-
 const gallery = document.querySelector(".gallery");
-
-const modal = basicLightbox.create('', {
-  onShow: document.addEventListener("keydown", (e) => {
-    e.preventDefault()
-    if (e.target.nodeName !== "IMG") {
-    modal.content(`<img src="${images.original}">`);
-    modal.show();
-  }
-  }),
-  onClose: document.removeEventListener("keydown", (e) => {
-  e.preventDefault()
-  if (e.key === "Escape") {
-    modal.close();
-  }
-}),
-});
 
 gallery.innerHTML = images.reduce((html, { preview, original, description }) => html + 
 `<li class="gallery-item">
@@ -144,39 +80,36 @@ gallery.innerHTML = images.reduce((html, { preview, original, description }) => 
   </a>
 </li>`, "")
 
+const modal = basicLightbox.create(`<img class="modal-image" src="" width="1200" height="600">`, {
+  onShow: () => {
+    document.addEventListener("keydown", onRemoveListener)
+  },
+  onClose: () => {
+    document.removeEventListener("keydown", onRemoveListener)
+  },
   
+})
 
-  
-//// 3 ////
-
-
-const gallery = document.querySelector(".gallery");
-
-gallery.innerHTML = images.map(({ preview, original, description }) =>
-`<li class="gallery-item">
-  <a class="gallery-link" href="${original}">
-    <img
-      class="gallery-image"
-      src="${preview}"
-      data-source="${original}"
-      alt="${description}"
-    />
-  </a>
-</li>`).join("")
-
+function onRemoveListener(e) {
+  if (e.key === "Escape") {
+    modal.close();
+  }
+}
 
 gallery.addEventListener("click", e => {
-  e.preventDefault();
+  e.preventDefault()
 
-  const clicked = e.target.dataset.source;
-  if (clicked) {
-    console.log(clicked);
-  };
+  if (e.target.nodeName !== "IMG") {
+    return
+  }  
+  const modalImg = modal.element().querySelector(".modal-image");
+  modalImg.src = e.target.dataset.source;
 
-  const modal = basicLightbox.create(`<img
-      width="1200"
-      height="1200"
-src="${clicked}"
-    />`).show()
-
+  modal.show()
 })
+
+
+
+
+
+
