@@ -31,7 +31,7 @@ ul, li {
 }
 
 .gallery-image {
-  height: 360px;
-  width: 300px;
+  height: auto;
+  width: 400px;
   object-fit: cover;
 }
